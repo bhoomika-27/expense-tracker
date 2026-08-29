@@ -1,0 +1,42 @@
+body {
+    background-color: #f6f8fb;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-radius: 0.75rem;
+}
+
+.stat-card h3 {
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.stat-card small {
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: #6c757d;
+}
+
+.category-bar {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e9ecef;
+    overflow: hidden;
+}
+
+.category-bar > span {
+    display: block;
+    height: 100%;
+    background-color: #0d6efd;
+}
+
+.auth-card {
+    max-width: 420px;
+    margin: 3rem auto;
+}
+
+.table > :not(caption) > * > * {
+    vertical-align: middle;
+}
