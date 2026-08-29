@@ -6,7 +6,6 @@ This project was built as a learning exercise during [AWS re/Start](https://aws.
 
 ## Architecture
 
-)
 
 ```
 Internet
@@ -105,4 +104,4 @@ expense-tracker/
 
 ---
 
-Built by Bhoomika Panchal as part of AWS re/Start.
+Built by Bhoomika Panchal.
