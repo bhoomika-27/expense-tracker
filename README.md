@@ -38,11 +38,14 @@ Deliberately *not* used: React/Angular/Vue, Node.js, Laravel, Docker, Kubernetes
 - Passwords hashed with `password_hash()` / `password_verify()` — never stored in plaintext
 - All database queries use PDO prepared statements — no raw string concatenation of user input into SQL
 - Every expense read/update/delete is scoped by `user_id`, so a user can never touch another user's data by changing an `id` in the URL
+<<<<<<< HEAD
 ## Screenshots 
 ![Landing page](screenshots/landing_page.png)
 ![Dashboard](screenshots/dashboard.png)
 ![Add expense](screenshots/addexpense.png)
 ![Expenses list](screenshots/expenses.png)
+=======
+>>>>>>> dd1de35f8b05c473da30aa7766ba98d7242cefac
 
 ## AWS infrastructure, piece by piece
 
