@@ -1,63 +1,108 @@
-# Personal Expense Tracker
+# Personal Expense Tracker — Deployed on AWS (3-Tier Architecture)
 
-A simple PHP + MySQL expense tracker, built to run locally on XAMPP first,
-then later deploy as the application layer of an AWS 3-tier architecture
-(ALB → EC2 → RDS MySQL).
+A simple, functional Personal Expense Tracker built with PHP and MySQL, deployed on AWS using a proper 3-tier architecture: **Application Load Balancer → EC2 → RDS MySQL**, all inside a custom VPC with public/private subnet isolation.
+
+This project was built as a learning exercise during [AWS re/Start](https://aws.amazon.com/training/restart/) — the goal was to keep the application layer simple and beginner-friendly so the real focus could stay on the AWS infrastructure: networking, security boundaries, and deployment.
+
+## Architecture
+
+![3-tier AWS architecture diagram](docs/architecture.svg)
+
+```
+Internet
+   │
+   ▼
+Application Load Balancer  (public subnets · alb-sg: HTTP from anywhere)
+   │
+   ▼
+EC2 — Apache + PHP          (public subnet · web-sg: HTTP only from alb-sg)
+   │
+   ▼
+RDS — MySQL                 (private subnets · db-sg: MySQL only from web-sg)
+```
+
+**Why this shape matters:** the browser can only ever reach the load balancer. The load balancer is the only thing `web-sg` trusts, and EC2 is the only thing `db-sg` trusts. Even with the database's hostname in hand, there's no network path to it from outside the VPC — the private subnets simply have no route to the internet. Security here is enforced at the network layer, not just the application layer.
 
 ## Tech stack
-HTML5, CSS3, Bootstrap 5, vanilla JavaScript, PHP 8+, MySQL, Apache.
+
+**Application:** HTML5, CSS3, Bootstrap 5, vanilla JavaScript, PHP 8+, MySQL, Apache
+**Infrastructure:** AWS VPC, EC2, RDS (MySQL), Application Load Balancer, Security Groups
+
+Deliberately *not* used: React/Angular/Vue, Node.js, Laravel, Docker, Kubernetes — the goal was to keep the application simple enough to fully understand end-to-end, so all learning effort could go toward the AWS side.
+
+## Features
+
+- User registration, login, logout (PHP sessions)
+- Add, edit, delete expenses — each user only ever sees their own
+- Filter expenses by category and/or date range
+- Dashboard with total spend, current-month spend, transaction count, and a category breakdown
+- Passwords hashed with `password_hash()` / `password_verify()` — never stored in plaintext
+- All database queries use PDO prepared statements — no raw string concatenation of user input into SQL
+- Every expense read/update/delete is scoped by `user_id`, so a user can never touch another user's data by changing an `id` in the URL
+
+## AWS infrastructure, piece by piece
+
+| Component | Purpose |
+|---|---|
+| **VPC** (`10.0.0.0/16`) | An isolated network boundary for the whole project |
+| **Public subnets** (2 AZs) | Host the ALB and EC2 — reachable from the internet via an Internet Gateway |
+| **Private subnets** (2 AZs) | Host RDS — no internet route at all |
+| **`alb-sg`** | Allows inbound HTTP (80) from anywhere |
+| **`web-sg`** | Allows inbound HTTP (80) *only* from `alb-sg`, and SSH (22) from a trusted IP |
+| **`db-sg`** | Allows inbound MySQL (3306) *only* from `web-sg` |
+| **EC2** | Runs Apache + PHP 8, application code deployed via `git clone` from this repo |
+| **RDS (MySQL)** | Managed MySQL instance, schema loaded from `database.sql` |
+| **ALB** | Public entry point; forwards HTTP traffic to EC2 via a target group with health checks |
+
+## Local setup (XAMPP)
+
+1. Install/start Apache and MySQL in XAMPP.
+2. Copy this repo into your XAMPP `htdocs` directory.
+3. Import `database.sql` via phpMyAdmin (creates the database, tables, and a sample test user).
+4. Check `config/database.php` — the XAMPP defaults (`localhost`, user `root`, empty password) should work out of the box.
+5. Open `http://localhost/expense-tracker/` in your browser.
+6. Register an account, or log in with the sample user: `test@example.com` / `Test@1234`.
+
+## AWS deployment (high level)
+
+1. Create a VPC with 2 public + 2 private subnets across 2 Availability Zones, an Internet Gateway, and appropriate route tables.
+2. Create `web-sg` and `db-sg`, with `db-sg` sourcing MySQL access from `web-sg` (not an IP range).
+3. Launch RDS MySQL in the private subnets, not publicly accessible, secured by `db-sg`.
+4. Launch an EC2 instance in a public subnet, secured by `web-sg`; install Apache, PHP, and the MySQL client.
+5. Clone this repo onto EC2 into `/var/www/html`, set ownership/permissions for the `apache` user.
+6. Update `config/database.php` with the RDS endpoint and credentials (this file is gitignored — see below).
+7. Import `database.sql` into RDS.
+8. Create a target group + Application Load Balancer in front of EC2, with its own `alb-sg`.
+9. Lock `web-sg` to only accept HTTP from `alb-sg`, so EC2 is no longer reachable by its own public IP.
+
+## Security notes
+
+- **Credentials are never committed.** `config/database.php` is listed in `.gitignore`. A previous commit briefly included real RDS credentials during initial development — the RDS master password was rotated immediately after, so that historical commit poses no risk.
+- **Defense in depth:** the network layer (VPC subnet routing + security groups) enforces isolation independently of anything the application code does.
+- **No public database access, ever** — RDS lives in private subnets with no internet route, regardless of security group rules.
+
+## What I'd add next
+
+- Auto Scaling group behind the ALB (multiple EC2 instances instead of one)
+- HTTPS via an ACM certificate on the ALB
+- Infrastructure as Code (Terraform/CloudFormation) so this environment is reproducible without manual console steps
+- CloudWatch alarms and basic monitoring
 
 ## Project structure
+
 ```
 expense-tracker/
-├── config/database.php     # All DB connection details live here
-├── includes/                # header, footer, auth, shared functions
-├── assets/                  # css, js
+├── config/database.php      # DB connection (gitignored — see Security notes)
+├── includes/                 # header, footer, auth, shared functions
+├── assets/                   # css, js
 ├── index.php, login.php, register.php
 ├── dashboard.php, expenses.php
 ├── add_expense.php, edit_expense.php, delete_expense.php
 ├── logout.php
-└── database.sql             # schema + sample data
+├── docs/architecture.svg
+└── database.sql
 ```
 
-## Setup on XAMPP
+---
 
-1. **Install/start Apache and MySQL** in the XAMPP Control Panel.
-2. **Copy the project folder** into your XAMPP `htdocs` directory, e.g.
-   `C:\xampp\htdocs\expense-tracker` (Windows) or `/Applications/XAMPP/htdocs/expense-tracker` (Mac).
-3. **Create the database**: open phpMyAdmin (`http://localhost/phpmyadmin`),
-   go to the **Import** tab, and import `database.sql`. This creates the
-   `expense_tracker` database, the `users` and `expenses` tables, and a
-   sample test user with a few sample expenses.
-4. **Check `config/database.php`** — the defaults (`localhost`, user `root`,
-   empty password) match a standard XAMPP install, so you usually don't
-   need to change anything locally.
-5. **Open the app**: go to `http://localhost/expense-tracker/` in your browser.
-6. **Register a new account** (recommended) or log in with the sample test
-   user described below.
-7. Add, edit, filter, and delete expenses from the dashboard.
-
-## Test user
-
-`database.sql` includes one ready-to-use sample account:
-
-- **Email:** `test@example.com`
-- **Password:** `Test@1234`
-
-Its password is stored as a real bcrypt hash (not plaintext), so it works
-immediately with `password_verify()` after you import `database.sql`. You
-can also just register your own account through the Register page — it
-runs `password_hash()` for you the same way.
-
-## Security notes
-- Passwords are hashed with `password_hash()` / `password_verify()` — never stored in plaintext.
-- All database queries use PDO prepared statements (no string concatenation of user input into SQL).
-- Every expense query/update/delete is scoped by `user_id`, so a user can never view or modify another user's expenses by changing an `id` in the URL.
-- Authenticated pages call `requireLogin()`, which redirects anonymous visitors to `login.php`.
-- All user-supplied output is escaped with `htmlspecialchars()` via the `h()` helper before being echoed into HTML.
-
-## Moving to AWS later
-When you're ready to deploy as a 3-tier architecture, only `config/database.php`
-needs to change — update `DB_HOST`, `DB_USER`, and `DB_PASS` to point at your
-Amazon RDS MySQL instance instead of local MySQL. No application code changes
-should be needed.
+Built by Bhoomika Panchal as part of AWS re/Start.
