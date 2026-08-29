@@ -6,7 +6,8 @@ This project was built as a learning exercise during [AWS re/Start](https://aws.
 
 ## Architecture
 
-![3-tier AWS architecture diagram](docs/architecture.svg)
+![3-tier AWS architecture diagram](![Uploading image.png…]()
+)
 
 ```
 Internet
