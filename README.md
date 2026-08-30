@@ -163,6 +163,6 @@ expense-tracker/
 
 <div align="center">
 
-Built by **Bhoomika Panchal** as part of AWS re/Start.
+Built by **Bhoomika Panchal** 
 
 </div>
