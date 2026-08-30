@@ -19,7 +19,7 @@
 
 A simple, functional Personal Expense Tracker, built with the goal of learning how to deploy an application as a real, production-style **3-tier architecture** on AWS — not just "an app on a server," but a properly network-isolated, security-group-enforced system: **Application Load Balancer → EC2 → RDS MySQL**, inside a custom VPC.
 
-The application layer was kept deliberately simple so the focus could stay on the infrastructure: networking, security boundaries, IAM, and deployment — built as a learning project during [AWS re/Start](https://aws.amazon.com/training/restart/).
+The application layer was kept deliberately simple so the focus could stay on the infrastructure: networking, security boundaries, IAM, and deployment — built as a learning project.
 
 ## Table of contents
 
@@ -162,6 +162,6 @@ expense-tracker/
 
 <div align="center">
 
-Built by **Bhoomika Panchal** as part of AWS re/Start.
+Built by **Bhoomika Panchal** 
 
 </div>
