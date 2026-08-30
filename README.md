@@ -1,25 +1,26 @@
+
 <div align="center">
 
-# 💰 Personal Expense Tracker
-
-**A PHP & MySQL expense tracker, deployed on AWS as a secured 3-tier architecture.**
+# ☁️ AWS 3-Tier Cloud Architecture
+### Application Load Balancer → EC2 → RDS, deployed with a Personal Expense Tracker as the example app
 
 ![PHP](https://img.shields.io/badge/PHP-8+-777BB4?logo=php&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-VPC%20·%20EC2%20·%20RDS%20·%20ALB-FF9900?logo=amazonaws&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?logo=bootstrap&logoColor=white)
 
+**Live demo:** [workorbit.online](https://workorbit.online)
+
 </div>
 
 ---
-**Live demo:**
-[workorbit.online](http://workorbit.online)
+
 ## Overview
 
+A production-style **3-tier architecture on AWS** — Application Load Balancer → EC2 → RDS MySQL, inside a custom VPC with public/private subnet isolation and security-group-enforced trust boundaries. The application layer (a simple PHP/MySQL Personal Expense Tracker) was deliberately kept small so the real focus could stay on the infrastructure: networking, security, IAM, and deployment — built as a learning project.
 
-A simple, functional Personal Expense Tracker, built with the goal of learning how to deploy an application as a real, production-style **3-tier architecture** on AWS — not just "an app on a server," but a properly network-isolated, security-group-enforced system: **Application Load Balancer → EC2 → RDS MySQL**, inside a custom VPC.
-
-The application layer was kept deliberately simple so the focus could stay on the infrastructure: networking, security boundaries, IAM, and deployment — built as a learning project during [AWS re/Start](https://aws.amazon.com/training/restart/).
+The app itself isn't the point — the architecture is. Users, expenses, and CRUD operations are just the workload running on top of it.
+EOF
 
 ## Table of contents
 
