@@ -36,7 +36,7 @@ The application layer was kept deliberately simple so the focus could stay on th
 
 ## Architecture
 
-![3-tier AWS architecture diagram](architecture.svg)
+![3-tier AWS architecture diagram](screenshots/image.png)
 
 ```
 Internet
@@ -82,11 +82,11 @@ Deliberately *not* used: React/Angular/Vue, Node.js, Laravel, Docker, Kubernetes
 
 | Landing page | Dashboard |
 |---|---|
-| ![Landing page](screenshots/landing_page.png) | ![Dashboard](screenshots/dashboard.png) |
+| ![Landing page](screenshots/landing_pagef.png) | ![Dashboard](screenshots/dashf.png) |
 
 | Add expense | Expenses list |
 |---|---|
-| ![Add expense](screenshots/addexpense.png) | ![Expenses list](screenshots/expenses.png) |
+| ![Add expense](screenshots/addex.png) | ![Expenses list](screenshots/expensef.png) |
 
 ## AWS infrastructure, piece by piece
 
