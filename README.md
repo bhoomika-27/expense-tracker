@@ -8,7 +8,6 @@
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
 ![AWS](https://img.shields.io/badge/AWS-VPC%20·%20EC2%20·%20RDS%20·%20ALB-FF9900?logo=amazonaws&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?logo=bootstrap&logoColor=white)
-
 **Live demo:** [workorbit.online](https://workorbit.online)
 
 </div>
@@ -88,6 +87,18 @@ Deliberately *not* used: React/Angular/Vue, Node.js, Laravel, Docker, Kubernetes
 | Add expense | Expenses list |
 |---|---|
 | ![Add expense](screenshots/addex.png) | ![Expenses list](screenshots/expensef.png) |
+
+### AWS Console
+
+| VPC | EC2 |
+|---|---|
+| ![VPC](screenshots/vpc.png) | ![EC2](screenshots/ec2.png) |
+
+| RDS | ALB |
+|---|---|
+| ![RDS](screenshots/rds.png) | ![ALB](screenshots/alb.png) |
+
+![ACM Certificate](screenshots/acm.png)
 
 ## AWS infrastructure, piece by piece
 
